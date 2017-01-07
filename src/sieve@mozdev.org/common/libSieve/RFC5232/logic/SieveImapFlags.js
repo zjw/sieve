@@ -43,7 +43,7 @@
   SieveSetFlag.isCapable
       = function (capabilities)
   {
-    return (capabilities["imap4flags"] === true);      
+    return (capabilities["imapflags"] === true);
   };
   
   SieveSetFlag.nodeName = function () {
@@ -72,7 +72,7 @@
   SieveSetFlag.prototype.require
       = function (requires)
   {
-    requires["imap4flags"] = true;
+    requires["imapflags"] = true;
   };
   
   SieveSetFlag.prototype.toScript
@@ -115,7 +115,7 @@
   SieveAddFlag.isCapable
       = function (capabilities)
   {
-    return (capabilities["imap4flags"] === true);      
+    return (capabilities["imapflags"] === true);
   };
   
   SieveAddFlag.nodeName = function () {
@@ -150,7 +150,7 @@
   SieveAddFlag.prototype.require
       = function (requires)
   {
-    requires["imap4flags"] = true;
+    requires["imapflags"] = true;
   };
   
   SieveAddFlag.prototype.toScript
@@ -194,7 +194,7 @@
   SieveRemoveFlag.isCapable
       = function (capabilities)
   {
-    return (capabilities["imap4flags"] === true);      
+    return (capabilities["imapflags"] === true);
   };
   
   SieveRemoveFlag.nodeName = function () {
@@ -229,7 +229,7 @@
   SieveRemoveFlag.prototype.require
       = function (requires)
   {
-    requires["imap4flags"] = true;
+    requires["imapflags"] = true;
   };
   
   SieveRemoveFlag.prototype.toScript
@@ -245,97 +245,11 @@
   
   /******************************************************************************/
   
-  //hasflag [MATCH-TYPE] <variable-list: string-list> <list-of-flags: string-list>
-  
-  // REGISTER
-  
-  
-   
-  function SieveHasFlag(docshell,id)
-  {
-    SieveAbstractElement.call(this,docshell,id); 
-  
-    this.whiteSpace = [];
-    this.whiteSpace[0] = this._createByName("whitespace", " ");
-    this.whiteSpace[1] = this._createByName("whitespace", " ");
-    this.whiteSpace[2] = this._createByName("whitespace", " ");    
-  
-    this.matchType      = null;
-    this.flaglist = this._createByName("stringlist");
-  }
-  
-  SieveHasFlag.prototype = Object.create(SieveAbstractElement.prototype);
-  SieveHasFlag.prototype.constructor = SieveHasFlag;
-  
-  SieveHasFlag.isElement
-    = function(parser, lexer)
-  { 
-    return parser.startsWith("hasflag");
-  };
-  
-  SieveHasFlag.isCapable
-      = function (capabilities)
-  {
-    return (capabilities["imap4flags"] === true);      
-  };
-  
-  SieveHasFlag.nodeName = function () {
-    return "test/hasflag";
-  };
-  
-  SieveHasFlag.nodeType  = function () {
-    return "test";
-  };
-  
-  SieveHasFlag.prototype.init
-      = function (parser)
-  {
-    parser.extract("hasflag");
-    
-    this.whiteSpace[0].init(parser);
-    
-    
-    if (this._probeByName("match-type",parser))
-    {
-      this.matchType = this._createByName("match-type",parser);    
-      this.whiteSpace[1].init(parser);
-    }
-    
-    this.flaglist.init(parser);
-    this.whiteSpace[2].init(parser);
-        
-    return this;
-  };   
-  
-  SieveHasFlag.prototype.require
-      = function (imports)
-  {
-    imports["imap4flags"] = true;
-    
-    if (this.matchType)
-      this.matchType.require(imports);
-  };
-  
-  SieveHasFlag.prototype.toScript
-      = function ()
-  {
-    return "hasflag"
-      + this.whiteSpace[0].toScript()
-      + ((this.matchType)?this.matchType.toScript():"")
-      + ((this.matchType)?this.whiteSpace[1].toScript():"")
-      + this.flaglist.toScript()
-      + this.whiteSpace[2].toScript();
-  };
-  
-  
-  /******************************************************************************/
-  
   if (!SieveLexer)
     throw "Could not register IMAP Flags";
   
   SieveLexer.register(SieveAddFlag);   
   SieveLexer.register(SieveRemoveFlag);  
   SieveLexer.register(SieveSetFlag);
-  SieveLexer.register(SieveHasFlag);
 
 })(window);
